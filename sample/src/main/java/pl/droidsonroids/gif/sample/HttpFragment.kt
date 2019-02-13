@@ -9,14 +9,14 @@ import pl.droidsonroids.gif.GifTextureView
 import pl.droidsonroids.gif.InputSource
 import java.nio.ByteBuffer
 
-class HttpFragment : BaseFragment(), View.OnClickListener {
+class HttpFragment : BaseFragment(), View.OnClickListener, GifDownloader.GifDownloaderCallback {
 
     private var gifTextureView: GifTextureView? = null
     private val gifDownloader = GifDownloader(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         gifTextureView = inflater.inflate(R.layout.http, container, false) as GifTextureView
-        gifDownloader.load()
+        gifDownloader.load(GIF_URL)
         return gifTextureView
     }
 
@@ -32,10 +32,10 @@ class HttpFragment : BaseFragment(), View.OnClickListener {
         super.onDestroy()
     }
 
-    internal fun onGifDownloaded(buffer: ByteBuffer) =
+    override fun onGifDownloaded(buffer: ByteBuffer) =
         gifTextureView!!.setInputSource(InputSource.DirectByteBufferSource(buffer))
 
-    internal fun onDownloadFailed(e: Exception) {
+    override fun onDownloadFailed(e: Exception) {
         gifTextureView!!.setOnClickListener(this@HttpFragment)
         if (isDetached) {
             return
@@ -45,5 +45,5 @@ class HttpFragment : BaseFragment(), View.OnClickListener {
 
     }
 
-    override fun onClick(v: View) = gifDownloader.load()
+    override fun onClick(v: View) = gifDownloader.load(GIF_URL)
 }

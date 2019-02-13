@@ -29,12 +29,13 @@ class GifWallpaperService : WallpaperService() {
 
         private val eglConnection = OffscreenEGLConnection()
         private val gifTexImage2DDrawer = GifTexImage2DProgram(gifTexImage2D)
+
         private var renderJob = Job()
         private var frameIndex = 0
 
-        override fun getDesiredMinimumWidth() = gifTexImage2DDrawer.width
+        override fun getDesiredMinimumWidth() = 200
 
-        override fun getDesiredMinimumHeight() = gifTexImage2DDrawer.height
+        override fun getDesiredMinimumHeight() = 200
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {
             launch {

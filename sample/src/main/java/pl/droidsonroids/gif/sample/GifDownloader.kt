@@ -7,17 +7,23 @@ import java.net.URL
 import java.nio.ByteBuffer
 import java.nio.channels.Channels
 
-private const val GIF_URL =
-    "https://raw.githubusercontent.com/koral--/android-gif-drawable-sample/cb2d1f42b3045b2790a886d1574d3e74281de743/sample/src/main/assets/Animated-Flag-Hungary.gif"
+const val GIF_URL =
+        "https://raw.githubusercontent.com/koral--/android-gif-drawable-sample/cb2d1f42b3045b2790a886d1574d3e74281de743/sample/src/main/assets/Animated-Flag-Hungary.gif"
 
-class GifDownloader(httpFragment: HttpFragment) {
+class GifDownloader(httpFragment: GifDownloaderCallback) {
+
+    interface GifDownloaderCallback {
+        fun onGifDownloaded(buffer: ByteBuffer)
+        fun onDownloadFailed(e: Exception)
+    }
+
     private val fragmentReference = WeakReference(httpFragment)
     private var loadJob: Job? = null
 
-    fun load() {
+    fun load(url: String) {
         loadJob = GlobalScope.launch {
             try {
-                val buffer = downloadGif()
+                val buffer = downloadGif(url)
                 runOnUiThread {
                     onGifDownloaded(buffer)
                 }
@@ -29,7 +35,7 @@ class GifDownloader(httpFragment: HttpFragment) {
         }
     }
 
-    private suspend fun runOnUiThread(action: HttpFragment.() -> Unit) {
+    private suspend fun runOnUiThread(action: GifDownloaderCallback.() -> Unit) {
         withContext(Dispatchers.Main) {
             fragmentReference.get()?.apply {
                 action()
@@ -41,8 +47,8 @@ class GifDownloader(httpFragment: HttpFragment) {
         loadJob?.cancel()
     }
 
-    private fun downloadGif(): ByteBuffer {
-        val urlConnection = URL(GIF_URL).openConnection()
+    private fun downloadGif(url: String): ByteBuffer {
+        val urlConnection = URL(url).openConnection()
         urlConnection.connect()
         val contentLength = urlConnection.contentLength
         if (contentLength < 0) {

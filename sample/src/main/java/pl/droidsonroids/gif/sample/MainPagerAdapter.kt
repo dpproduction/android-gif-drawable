@@ -8,19 +8,20 @@ internal class MainPagerAdapter(activity: FragmentActivity) : FragmentStatePager
     private val pageTitles = activity.resources.getStringArray(R.array.pages)
 
     private val fragments = arrayOf(
-        GifSourcesFragment(),
-        GifTextViewFragment(),
-        GifTextureFragment(),
-        ImageSpanFragment(),
-        AnimationControlFragment(),
-        HttpFragment(),
-        TexturePlaceholderFragment(),
-        GifTexImage2DFragment(),
-        AnimatedSelectorFragment(),
-        GifDecoderFragment(),
-        TextureViewFragment(),
-        LiveWallpaperFragment(),
-        AboutFragment()
+            GifTexImage2DFragment(),
+            GifSourcesFragment(),
+            GifTextViewFragment(),
+            GifTextureFragment(),
+            ImageSpanFragment(),
+            AnimationControlFragment(),
+            HttpFragment(),
+            TexturePlaceholderFragment(),
+
+            AnimatedSelectorFragment(),
+            GifDecoderFragment(),
+            TextureViewFragment(),
+            LiveWallpaperFragment(),
+            AboutFragment()
     )
 
     override fun getItem(position: Int) = fragments[position]
